@@ -182,7 +182,7 @@ public struct QueueDatabaseEntryMigration: Migration {
             .field("jobId", .string, .required)
             .field("jobName", .string, .required)
             .field("queueName", .string, .required)
-            .field("payload", .json, .required)
+            .field("payload", .data, .required)
             .field("maxRetryCount", .int, .required)
             .field("delayUntil", .datetime)
             .field("queuedAt", .datetime, .required)
