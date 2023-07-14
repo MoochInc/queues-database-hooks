@@ -74,7 +74,7 @@ public final class QueueDatabaseEntry: Model {
     public var updatedAt: Date?
 
     /// A queue job's status.
-    public enum Status: Int8, CaseIterable, Codable {
+    public enum Status: UInt8, CaseIterable, Codable {
         /// The job is queued but not yet picked up for processing.
         case queued = 0
     
@@ -189,7 +189,7 @@ public struct QueueDatabaseEntryMigration: Migration {
             .field("dequeuedAt", .datetime)
             .field("completedAt", .datetime)
             .field("errorString", .string)
-            .field("status", .int8, .required)
+            .field("status", .uint8, .required)
             .field("createdAt", .datetime)
             .field("updatedAt", .datetime)
             .unique(on: "jobId")
