@@ -48,10 +48,12 @@ public extension QueueDatabaseEntry {
                 SELECT
                     COUNT(\(ident: "id")) AS \(ident: "completedJobs"),
                     COALESCE(
-                        SUM(
-                            CASE WHEN\(ident: "status")::int = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
+                        CAST(
+                            SUM(
+                                CASE WHEN CAST(\(ident: "status") AS TEXT)::INTEGER = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
+                            ) AS DOUBLE PRECISION
                         ) / GREATEST(COUNT(\(ident: "id")), 1),
-                        \(literal: 1)
+                        \(literal: 1.0)
                     ) AS \(ident: "percentSuccess")
                 FROM
                     \(ident: QueueDatabaseEntry.schema)
