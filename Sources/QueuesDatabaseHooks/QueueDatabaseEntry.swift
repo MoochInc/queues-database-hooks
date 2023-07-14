@@ -74,18 +74,18 @@ public final class QueueDatabaseEntry: Model {
     public var updatedAt: Date?
 
     /// A queue job's status.
-    public enum Status: Int, CaseIterable, Codable {
+    public enum Status: Int8, CaseIterable, Codable {
         /// The job is queued but not yet picked up for processing.
-        case queued
-
+        case queued = 0
+    
         /// The job has been moved to the processing queue and is currently running.
-        case running
-
+        case running = 1
+    
         /// The job was completed successfully.
-        case success
-
+        case success = 2
+    
         /// The job failed.
-        case error
+        case error = 3
     }
 
     public init() { }
