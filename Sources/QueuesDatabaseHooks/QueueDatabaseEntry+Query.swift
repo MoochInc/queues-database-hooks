@@ -15,8 +15,8 @@ public extension QueueDatabaseEntry {
             /// This syntax is compatible with all supported SQL databases at the time of this writing.
             return sql.raw("""
                 SELECT
-                    COALESCE(SUM(IF(\(ident: "status")=\(literal: 0),\(literal: 1),\(literal: 0))),\(literal: 0)) AS \(ident: "queuedCount"),
-                    COALESCE(SUM(IF(\(ident: "status")=\(literal: 1),\(literal: 1),\(literal: 0))),\(literal: 0)) AS \(ident: "runningCount")
+                    COALESCE(SUM(CASE WHEN \(ident: "status") = \(literal: 0) THEN \(literal: 1) ELSE \(literal: 0) END), \(literal: 0)) AS \(ident: "queuedCount"),
+                    COALESCE(SUM(CASE WHEN \(ident: "status") = \(literal: 1) THEN \(literal: 1) ELSE \(literal: 0) END), \(literal: 0)) AS \(ident: "runningCount")
                 FROM
                     \(ident: QueueDatabaseEntry.schema)
                 """)
@@ -47,12 +47,16 @@ public extension QueueDatabaseEntry {
             return sql.raw("""
                 SELECT
                     COUNT(\(ident: "id")) AS \(ident: "completedJobs"),
-                    COALESCE(SUM(IF(\(ident: "status")=\(literal: 2),\(literal: 1),\(literal: 0))) / COUNT(\(ident: "id")),\(literal: 1))
-                        AS \(ident: "percentSuccess")
+                    COALESCE(
+                        SUM(
+                            CASE WHEN \(ident: "status") = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
+                        ) / GREATEST(COUNT(\(ident: "id")), 1),
+                        \(literal: 1)
+                    ) AS \(ident: "percentSuccess")
                 FROM
                     \(ident: QueueDatabaseEntry.schema)
                 WHERE
-                    \(ident: "completedAt")>=\(bind: deadline)
+                    \(ident: "completedAt") >= \(bind: deadline)
                 """)
             .first(decoding: CompletedJobStatusResponse.self).unwrap(or: Abort(.badRequest, reason: "Could not get data for status"))
         } else {
