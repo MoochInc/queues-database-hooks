@@ -15,8 +15,8 @@ public extension QueueDatabaseEntry {
             /// This syntax is compatible with all supported SQL databases at the time of this writing.
             return sql.raw("""
                 SELECT
-                    COALESCE(SUM(CASE WHEN CAST(\(ident: "status") AS SMALLINT) = \(literal: 0) THEN \(literal: 1) ELSE \(literal: 0) END), \(literal: 0)) AS \(ident: "queuedCount"),
-                    COALESCE(SUM(CASE WHEN CAST(\(ident: "status") AS SMALLINT) = \(literal: 1) THEN \(literal: 1) ELSE \(literal: 0) END), \(literal: 0)) AS \(ident: "runningCount")
+                    COALESCE(SUM(CASE WHEN \(ident: "status")::int = \(literal: 0) THEN \(literal: 1) ELSE \(literal: 0) END), \(literal: 0)) AS \(ident: "queuedCount"),
+                    COALESCE(SUM(CASE WHEN \(ident: "status")::int = \(literal: 1) THEN \(literal: 1) ELSE \(literal: 0) END), \(literal: 0)) AS \(ident: "runningCount")
                 FROM
                     \(ident: QueueDatabaseEntry.schema)
                 """)
@@ -49,7 +49,7 @@ public extension QueueDatabaseEntry {
                     COUNT(\(ident: "id")) AS \(ident: "completedJobs"),
                     COALESCE(
                         SUM(
-                            CASE WHEN CAST(\(ident: "status") AS SMALLINT) = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
+                            CASE WHEN\(ident: "status")::int = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
                         ) / GREATEST(COUNT(\(ident: "id")), 1),
                         \(literal: 1)
                     ) AS \(ident: "percentSuccess")
