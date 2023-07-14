@@ -53,7 +53,7 @@ public extension QueueDatabaseEntry {
                                 CASE WHEN CAST(\(ident: "status") AS TEXT)::INTEGER = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
                             ) AS DOUBLE PRECISION
                         ) / GREATEST(COUNT(\(ident: "id")), 1),
-                        \(literal: 1.0)
+                        \(literal: 1) AS DOUBLE PRECISION
                     ) AS \(ident: "percentSuccess")
                 FROM
                     \(ident: QueueDatabaseEntry.schema)
