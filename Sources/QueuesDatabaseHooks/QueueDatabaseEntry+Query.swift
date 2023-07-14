@@ -50,7 +50,7 @@ public extension QueueDatabaseEntry {
                     COALESCE(
                         CAST(
                             SUM(
-                                CASE WHEN CAST(\(ident: "status") AS TEXT)::INTEGER = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
+                                CASE WHEN \(ident: "status")::INTEGER = \(literal: 2) THEN \(literal: 1) ELSE \(literal: 0) END
                             ) AS DOUBLE PRECISION
                         ) / GREATEST(COUNT(\(ident: "id")), 1),
                         \(literal: 1) AS DOUBLE PRECISION
